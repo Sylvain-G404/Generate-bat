@@ -1,22 +1,62 @@
-# 🗺️ Windows Project Structure Generator
+# 🗺️ Windows IA & Project Structure Generator
 
-Un micro-utilitaire d'automatisation léger pour Windows (`.bat`) qui permet de cartographier instantanément l'arborescence complète de n'importe quel dossier de projet et de générer un rapport au format texte épuré.
+Un duo de micro-utilitaires d'automatisation légers pour Windows (`.bat`) spécialement conçus pour **simplifier et booster vos échanges avec les IA** (ChatGPT, Claude, Copilot...).
 
-Idéal pour documenter rapidement vos dépôts GitHub ou enrichir vos fichiers `README.md` sans dépendance externe.
+En un double-clic, ils cartographient votre projet et génèrent l'arborescence exacte de vos fichiers ainsi que leurs **liens absolus vers votre dépôt GitHub**. L'IA peut ainsi instantanément visualiser votre architecture et aller lire chirurgicalement le code source de chaque fichier !
 
 ---
 
 ## 🚀 Fonctionnalités
 
-- **Zéro Dépendance :** Fonctionne de manière 100% autonome grâce aux outils natifs de Windows et à une commande PowerShell masquée.
-- **Détection Dynamique :** Identifie automatiquement le nom du dossier racine actuel pour l'afficher en tête de l'arborescence (évite le point brut `.` par défaut de la commande `tree`).
-- **Rapport Isolé :** Crée un répertoire de rapport dédié et nettoie instantanément ses fichiers système temporaires pour laisser votre espace de travail impeccable.
+- **Optimisé pour les Prompts IA :** Génère un format d'arborescence épuré, graphique et parfaitement structuré, idéal à copier-coller en tête de vos prompts de développement.
+- **Accès Chirurgical :** Convertit votre structure locale en une liste d'URLs GitHub absolues (`/blob/main/...` ou `/tree/main/...`). L'IA clique et lit votre code en temps réel sans que vous ayez à lui copier-coller tout le projet !
+- **Filtre Profond Intelligent :** Ignore automatiquement les dossiers et caches lourds ou inutiles (`node_modules`, `.git`, `target` de Rust/Tauri, fichiers `.exe`...) pour ne pas saturer vos contextes de discussion.
+- **Zéro Perte de Temps :** Le script de liens copie automatiquement le résultat directement dans votre presse-papiers Windows (`clip`). Exécutez, faites `CTRL + V` dans votre IA, et codez !
+- **Gestion du Cache Discord & Réseaux :** Les scripts intègrent une configuration Open Graph pour afficher de superbes cartes d'aperçu graphiques (embeds) lors de vos partages de liens.
 
 ---
 
-## 📁 Rendu Visuel Obtenu
+## 📁 Les 2 Outils Disponibles
 
-Le script génère un dossier `Infos/` contenant un fichier `structure.txt` structuré comme ceci :
+### 1️⃣ `generate_structure_V2.bat` (Vision Locale)
+
+Génère une cartographie textuelle propre et ordonnée de l'organisation physique de votre ordinateur.
+
+- **Sortie :** `Infos_Structure/structure.txt`
+
+### 2️⃣ `generate_GitHub_Links.bat` (Vision IA & Liens Distants)
+
+Calcule dynamiquement l'URL de votre dépôt GitHub à partir de votre profil et du nom du dossier, applique le filtrage profond des fichiers inutiles, génère l'arbre d'URLs absolues et l'envoie dans votre presse-papiers.
+
+- **Sortie :** `Infos_Structure/links_github.txt` (et copie automatique !)
+
+---
+
+## 🛠️ Comment les utiliser ?
+
+1. Téléchargez les fichiers `.bat` depuis ce dépôt.
+2. Placez-les à la **racine** du dossier de votre projet.
+3. Configurez les scripts selon vos besoins (voir les sections de configuration ci-dessous).
+4. Double-cliquez sur le script de votre choix pour générer les rapports dans le dossier `Infos_Structure/`.
+
+---
+
+### ⚙️ Configuration de la liste d'exclusion (`SET IGNORE_LIST`)
+
+Le script `generate_structure_V2.bat` vous permet de masquer les fichiers ou dossiers volumineux et inutiles afin de garder un rendu propre.
+
+- **Action :** Ouvrez le fichier (Clic droit -> Modifier) et localisez la variable au début du script.
+- **Règle de syntaxe :** Écrivez les noms exacts des dossiers ou fichiers à ignorer, séparés **uniquement par des points-virgules (`;`)**, sans aucun crochet, espace ou guillemet.
+
+```batch
+:: ==========================================
+:: CONFIGURATION : Éléments à exclure de l'affichage
+:: ==========================================
+SET IGNORE_LIST=node_modules;.git;exemple1.txt;dossier_test;README.md
+:: ==========================================
+```
+
+### 📁 Rendu visuel généré pour la structure locale (`structure.txt`) :
 
 ```text
 C:.\Mon_Super_Projet
@@ -24,9 +64,6 @@ C:.\Mon_Super_Projet
 |   index.html
 |   README.md
 |
-+---Assets
-│       logo.png
-│
 +---JavaScript
 │       main.js
 │
@@ -36,52 +73,41 @@ C:.\Mon_Super_Projet
 
 ---
 
-## 🛠️ Comment l'utiliser ?
+### ⚙️ Configuration du profil distant (`SET GITHUB_USER`)
 
-1. Téléchargez le fichier `generate_structure.bat`.
-2. Placez le fichier à la **racine** du dossier que vous souhaitez cartographier.
-3. Double-cliquez sur `generate_structure.bat`.
+Le script `generate_GitHub_Links.bat` nécessite votre identifiant pour calculer dynamiquement les URLs absolues de votre code.
 
-Le terminal va s'ouvrir brièvement et créer instantanément un sous-dossier contenant l'arborescence finale :
-
-```text
-Infos/
-└── structure.txt
-```
-
-Vous n'avez plus qu'à copier-coller ce texte directement dans la section correspondante de votre documentation !
-
----
-
-## 🖥️ Aperçu du Code Source
-
-Développé dans un esprit de performance et de légèreté :
+- **Action :** Ouvrez le fichier (Clic droit -> Modifier).
+- **Règle de syntaxe :** Renseignez votre nom d'utilisateur directement après le signe égal.
 
 ```batch
-@echo off
-echo Generation de la structure du projet...
+:: ==========================================
+:: CONFIGURATION : Écris ton profil GitHub une fois pour toutes !
+:: ==========================================
+SET GITHUB_USER=VotrePseudoGitHub
+```
 
-if not exist Infos mkdir Infos
+### 🤖 Rendu visuel généré pour l'IA (`links_github.txt`) :
 
-tree /F /A > Infos\structure_temp.txt
+```text
+URL \ https://github.com
+|   \--- https://github.com/blob/main/index.html
++--- https://github.com/tree/main/JavaScript
 
-powershell -NoProfile -Command "\$nomProjet = Split-Path '%CD%' -Leaf; (Get-Content 'Infos\structure_temp.txt') -replace '^C:\.\(', ('C:.\' +\)nomProjet) | Set-Content 'Infos\structure.txt'"
-
-del Infos\structure_temp.txt
-
-echo Structure mise a jour !
-pause
+|   |   \--- https://github.com/blob/main/JavaScript/main.js
+\--- https://github.com/tree/main/Style
+        \--- https://github.com/blob/main/Style/style.css
 ```
 
 ---
 
 ## 👤 À propos de l'Auteur
 
-Ce micro-utilitaire a été développé avec passion par **Ki->ir->rA**, développeur indépendant spécialisé dans la création d'outils d'automatisation légers et d'interfaces web dynamiques.
+Ce projet a été développé avec passion par **KiirrA** (Sylvain-G404), développeur indépendant spécialisé dans la création d'outils d'automatisation légers, d'architectures logicielles découplées et d'interfaces web dynamiques.
 
-Si vous aimez ce script ou que vous l'utilisez dans vos projets, n'hésitez pas à laisser une ⭐️ sur ce dépôt pour soutenir le projet !
+Si ce duo de scripts vous simplifie la vie avec vos IA de dev, n'hésitez pas à laisser une ⭐️ sur ce dépôt pour soutenir le projet !
 
 - **GitHub :** [@Sylvain-G404](https://github.com/Sylvain-G404)
 - **Portfolio :** [Mon-Portfolio-Temps](https://sylvain-g404.github.io/Mon-Portfolio-Temps/)
 
-_« Une arborescence propre pour un code lisible. »_
+_« Communiquer proprement avec la machine pour coder sans limites. »_
