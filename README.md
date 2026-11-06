@@ -1,103 +1,79 @@
-# 🗺️ Windows IA & Project Structure Generator
+# 🛠️ Outils de Structure de Projet pour IA
 
-Un duo de micro-utilitaires d'automatisation légers pour Windows (`.bat`) spécialement conçus pour **simplifier et booster vos échanges avec les IA** (ChatGPT, Claude, Copilot...).
+Ce dépôt contient deux scripts Batch (`.bat`) conçus pour simplifier la communication avec les Intelligences Artificielles (comme ChatGPT, Claude ou Copilot).
 
-En un double-clic, ils cartographient votre projet et génèrent l'arborescence exacte de vos fichiers ainsi que leurs **liens absolus vers votre dépôt GitHub**. L'IA peut ainsi instantanément visualiser votre architecture et aller lire chirurgicalement le code source de chaque fichier !
-
----
-
-## 🚀 Fonctionnalités
-
-- **Optimisé pour les Prompts IA :** Génère un format d'arborescence épuré, graphique et parfaitement structuré, idéal à copier-coller en tête de vos prompts de développement.
-- **Accès Chirurgical :** Convertit votre structure locale en une liste d'URLs GitHub absolues (`/blob/main/...` ou `/tree/main/...`). L'IA clique et lit votre code en temps réel sans que vous ayez à lui copier-coller tout le projet !
-- **Filtre Profond Intelligent :** Ignore automatiquement les dossiers et caches lourds ou inutiles (`node_modules`, `.git`, `target` de Rust/Tauri, fichiers `.exe`...) pour ne pas saturer vos contextes de discussion.
-- **Zéro Perte de Temps :** Le script de liens copie automatiquement le résultat directement dans votre presse-papiers Windows (`clip`). Exécutez, faites `CTRL + V` dans votre IA, et codez !
-- **Gestion du Cache Discord & Réseaux :** Les scripts intègrent une configuration Open Graph pour afficher de superbes cartes d'aperçu graphiques (embeds) lors de vos partages de liens.
+Lorsque vous travaillez sur de gros projets, copier-coller l'intégralité de vos fichiers ou expliquer l'arborescence à une IA devient vite fastidieux et sature sa mémoire (Context Window). Ces outils résolvent ce problème en générant une cartographie textuelle propre et légère de votre projet, **quelle que soit sa taille**.
 
 ---
 
-## 📁 Les 2 Outils Disponibles
+## 💡 Pourquoi utiliser ces outils ?
 
-### 1️⃣ `generate_structure_V2.bat` (Vision Locale)
-
-Génère une cartographie textuelle propre et ordonnée de l'organisation physique de votre ordinateur.
-
-- **Sortie :** `Infos_Structure/structure.txt`
-
-### 2️⃣ `generate_GitHub_Links.bat` (Vision IA & Liens Distants)
-
-Calcule dynamiquement l'URL de votre dépôt GitHub à partir de votre profil et du nom du dossier, applique le filtrage profond des fichiers inutiles, génère l'arbre d'URLs absolues et l'envoie dans votre presse-papiers.
-
-- **Sortie :** `Infos_Structure/links_github.txt` (et copie automatique !)
+- 📉 **Économie de tokens :** Évite de surcharger vos requêtes avec des fichiers volumineux.
+- 🧠 **Meilleur contexte :** L'IA comprend instantanément l'organisation de votre code.
+- ⚡ **Rapidité :** Génération automatique en un double-clic.
 
 ---
 
-## 🛠️ Comment les utiliser ?
+## 🗂️ 1. Générateur de Structure Locale
 
-1. Téléchargez les fichiers `.bat` depuis ce dépôt.
-2. Placez-les à la **racine** du dossier de votre projet.
-3. Configurez les scripts selon vos besoins (voir les sections de configuration ci-dessous).
-4. Double-cliquez sur le script de votre choix pour générer les rapports dans le dossier `Infos_Structure/`.
+Ce script analyse votre dossier de travail actuel et génère un arbre textuel de vos fichiers et dossiers.
 
----
+### 📖 Comment l'utiliser ?
 
-### ⚙️ Configuration de la liste d'exclusion (`SET IGNORE_LIST`)
+1. Placez le script `.bat` à la racine de votre projet.
+2. Double-cliquez sur le script.
+3. Un dossier `Infos_Structure` est créé avec un fichier `structure.txt`.
 
-Le script `generate_structure_V2.bat` vous permet de masquer les fichiers ou dossiers volumineux et inutiles afin de garder un rendu propre.
-
-- **Action :** Ouvrez le fichier (Clic droit -> Modifier) et localisez la variable au début du script.
-- **Règle de syntaxe :** Écrivez les noms exacts des dossiers ou fichiers à ignorer, séparés **uniquement par des points-virgules (`;`)**, sans aucun crochet, espace ou guillemet.
-
-```batch
-:: ==========================================
-:: CONFIGURATION : Éléments à exclure de l'affichage
-:: ==========================================
-SET IGNORE_LIST=node_modules;.git;exemple1.txt;dossier_test;README.md
-:: ==========================================
-```
-
-### 📁 Rendu visuel généré pour la structure locale (`structure.txt`) :
+### 🖥️ Exemple de rendu généré (`structure.txt`) :
 
 ```text
-C:.\Mon_Super_Projet
-|   .gitignore
-|   index.html
-|   README.md
-|
-+---JavaScript
-│       main.js
-│
-\---Style
-        style.css
+C:.\MonProjet
++--- src
+|   +--- composants
+|   |   \--- Button.js
+|   \--- index.js
++--- public
+|   \--- index.html
+\--- package.json
 ```
 
 ---
 
-### ⚙️ Configuration du profil distant (`SET GITHUB_USER`)
+## 🔗 2. Générateur de Liens de Dépôt GitHub
 
-Le script `generate_GitHub_Links.bat` nécessite votre identifiant pour calculer dynamiquement les URLs absolues de votre code.
+Ce script génère la même arborescence, mais remplace le nom des fichiers par **les liens URL directs vers votre dépôt GitHub en ligne**. L'IA peut ainsi cliquer directement sur le fichier qui l'intéresse pour lire son contenu.
 
-- **Action :** Ouvrez le fichier (Clic droit -> Modifier).
-- **Règle de syntaxe :** Renseignez votre nom d'utilisateur directement après le signe égal.
+### 📖 Comment l'utiliser ?
 
-```batch
-:: ==========================================
-:: CONFIGURATION : Écris ton profil GitHub une fois pour toutes !
-:: ==========================================
-SET GITHUB_USER=VotrePseudoGitHub
-```
+1. Faites un clic droit sur le fichier `.bat` et choisissez **Modifier**.
+2. Remplissez votre pseudo à la ligne dédiée : `SET GITHUB_USER=VotrePseudoGitHub`.
+3. Enregistrez et lancez le script en double-cliquant dessus.
+4. Le résultat est **automatiquement copié dans votre presse-papiers** ! Vous n'avez plus qu'à faire un `CTRL+V` dans votre discussion avec l'IA.
 
-### 🤖 Rendu visuel généré pour l'IA (`links_github.txt`) :
+### 🖥️ Exemple de rendu généré & copié :
 
 ```text
 URL \ https://github.com
-|   \--- https://github.com/blob/main/index.html
-+--- https://github.com/tree/main/JavaScript
-
-|   |   \--- https://github.com/blob/main/JavaScript/main.js
-\--- https://github.com/tree/main/Style
-        \--- https://github.com/blob/main/Style/style.css
++--- https://github.com/tree/main/src
+|   +--- https://github.com/tree/main/src/composants
+|   |   \--- https://github.com/blob/main/src/composants/Button.js
+|   \--- https://github.com/blob/main/src/index.js
+\--- https://github.com/blob/main/src/package.json
 ```
+
+---
+
+## ⚙️ Configuration & Personnalisation
+
+Les deux scripts possèdent une liste d'exclusion (`IGNORE_LIST`) en haut de leur code. Par défaut, ils ignorent les dossiers lourds ou inutiles pour l'IA (comme `node_modules`, `.git`, ou le `README.md`).
+
+Si vous souhaitez ignorer d'autres éléments, modifiez simplement cette ligne dans les scripts :
+
+```batch
+SET IGNORE_LIST=node_modules;.git;exemple1.txt;dossier_test;votre_dossier_prive
+```
+
+_(Pensez à séparer chaque nom par un point-virgule `;`)_
 
 ---
 
